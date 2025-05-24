@@ -5,8 +5,6 @@ import "./globals.css";
 import { useState } from "react";
 
 
-
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -19,7 +17,7 @@ export default function RootLayout({
       <body>
         <QueryClientProvider client={queryClient}>
           <div className="container mx-auto py-8">
-            <h1 className="text-3xl font-bold mb-4">Movie App</h1>
+            <h1 className="text-3xl font-bold mb-4">Movie</h1>
             <hr />
             {children}
           </div>

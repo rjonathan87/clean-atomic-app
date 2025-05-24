@@ -4,80 +4,88 @@ Este proyecto es un ejemplo de cómo estructurar una aplicación frontend en Nex
 
 ## Estructura de Carpetas
 
+src/
+├── app/                                    
+│   ├── layout.tsx                         # Layout principal de la aplicación
+│   │   └── Configuración de React Query y estructura base HTML
+│   ├── page.tsx                          # Página principal
+│   │   └── Punto de entrada, renderiza componentes principales
+│   └── globals.css                       # Estilos globales con Tailwind
+│
+├── domain/                               
+│   ├── entities/                         
+│   │   ├── movie.entity.ts              # Interface/Tipo para modelo Movie
+│   │   └── user.entity.ts               # Interface/Tipo para modelo User
+│   │
+│   └── repositories/                     
+│       ├── movie.repository.ts          # Interface para operaciones de Movies
+│       └── user.repository.ts           # Interface para operaciones de Users
+│
+├── application/                          
+│   ├── useCases/                        
+│   │   ├── movie/                       
+│   │   │   ├── getMovies.useCase.ts    # Lógica para obtener películas
+│   │   │   └── getMovie.useCase.ts     # Lógica para obtener una película
+│   │   └── user/                        
+│   │       └── getUser.useCase.ts      # Lógica para obtener usuario
+│   │
+│   └── services/                        
+│       ├── movie.service.ts            # Orquestación de casos de uso de Movies
+│       └── user.service.ts             # Orquestación de casos de uso de Users
+│
+├── infrastructure/                      
+│   ├── api/                            
+│   │   ├── movieApi.ts                # Cliente HTTP para API de películas
+│   │   └── config.ts                  # Configuración de Axios/Fetch
+│   │
+│   └── repositories/                   
+│       └── movie.repository.impl.ts   # Implementación concreta del repositorio
+│
+├── presentation/                       
+│   ├── atoms/                         
+│   │   ├── Button/                    
+│   │   │   ├── Button.tsx            # Componente botón reutilizable
+│   │   │   └── Button.test.tsx       # Tests del componente
+│   │   └── Image/                     
+│   │       └── Image.tsx             # Componente imagen con fallback
+│   │
+│   ├── molecules/                     
+│   │   └── MovieCard/                
+│   │       ├── MovieCard.tsx         # Tarjeta de película (usa atoms)
+│   │       └── MovieCard.test.tsx    # Tests del componente
+│   │
+│   ├── organisms/                    
+│   │   └── MovieList/               
+│   │       ├── MovieList.tsx        # Lista de películas (usa molecules)
+│   │       └── MovieList.test.tsx   # Tests del componente
+│   │
+│   └── templates/                   
+│       └── MovieTemplate/          
+│           └── MovieTemplate.tsx    # Template base para páginas de películas
+│
+└── shared/                         
+    ├── hooks/                      
+    │   ├── useMovies.ts           # Hook personalizado para gestión de películas
+    │   └── useAuth.ts             # Hook para autenticación
+    │
+    └── utils/                     
+        ├── formatters.ts          # Funciones de formato (fechas, moneda)
+        └── validators.ts          # Funciones de validación
 ```
-tmdb-explorer-app/
-├── app/
-│   ├── (public)/             # Rutas públicas (ej. página de inicio, búsqueda)
-│   │   ├── page.tsx          # Página de inicio (películas populares)
-│   │   ├── search/
-│   │   │   └── page.tsx      # Página de búsqueda
-│   │   ├── movies/
-│   │   │   └── [id]/
-│   │   │       └── page.tsx  # Página de detalles de la película
-│   ├── layout.tsx          # Layout principal de la aplicación
-│   ├── loading.tsx         # Componente de carga global
-│   └── error.tsx           # Componente de error global
-├── src/
-│   ├── domain/
-│   │   ├── entities/        # Interfaces para los datos de películas (Movie, Genre, Cast, Crew, etc.)
-│   │   │   ├── movie.entity.ts
-│   │   │   ├── genre.entity.ts
-│   │   │   ├── cast.entity.ts
-│   │   │   └── crew.entity.ts
-│   │   ├── interfaces/      # Contratos para los repositorios de TMDb
-│   │   │   └── movie.repository.ts
-│   │   └── use-cases/       # Casos de uso para obtener datos de películas (GetPopularMovies, SearchMovies, GetMovieDetails)
-│   │       ├── get-popular-movies.ts
-│   │       ├── search-movies.ts
-│   │       └── get-movie-details.ts
-│   ├── application/
-│   │   └── use-cases/       # Handlers para los casos de uso (orquestación y lógica de negocio adicional)
-│   │       ├── get-popular-movies-handler.ts
-│   │       ├── search-movies-handler.ts
-│   │       └── get-movie-details-handler.ts
-│   ├── infrastructure/
-│   │   ├── api/             # Adaptador para la API de TMDb usando Axios
-│   │   │   └── tmdb-api.ts
-│   │   └── config/          # Configuración (ej. variables de entorno)
-│   │       └── tmdb-config.ts
-│   ├── presentation/
-│   │   ├── components/      # Componentes de React organizados por Atomic Design
-│   │   │   ├── atoms/
-│   │   │   │   ├── Button.tsx
-│   │   │   │   ├── Input.tsx
-│   │   │   │   ├── Typography.tsx
-│   │   │   │   └── MoviePoster.tsx
-│   │   │   ├── molecules/
-│   │   │   │   ├── MovieCard.tsx
-│   │   │   │   ├── SearchBar.tsx
-│   │   │   │   └── GenreBadge.tsx
-│   │   │   ├── organisms/
-│   │   │   │   ├── MovieList.tsx
-│   │   │   │   ├── MovieDetailsHeader.tsx
-│   │   │   │   └── CastList.tsx
-│   │   │   ├── templates/
-│   │   │   │   ├── MovieListTemplate.tsx
-│   │   │   │   └── MovieDetailsTemplate.tsx
-│   │   │   └── pages/         # Contenido específico de las páginas (se comunicarán con los templates y hooks)
-│   │   │       ├── components/  # Componentes específicos de las páginas (si es necesario)
-│   │   ├── hooks/           # Hooks personalizados para la presentación (ej. para manejar la búsqueda)
-│   │   │   └── useSearch.ts
-│   ├── shared/
-│   │   ├── utils/           # Funciones de utilidad (formato de fechas, etc.)
-│   │   │   └── helpers.ts
-│   │   ├── hooks/           # Hooks reutilizables (useDebounce)
-│   │   │   └── useDebounce.ts
-│   │   ├── constants/       # Constantes (endpoints de la API de TMDb, claves, etc.)
-│   │   │   └── api-endpoints.ts
-│   │   └── types/           # Tipos y interfaces compartidas
-│   │       └── movie.types.ts
-├── public/
-│   └── ...
-├── next.config.js
-├── postcss.config.js
-├── tailwind.config.js
-├── tsconfig.json
-└── README.md
 
+## Archivos de Configuración Root
+
+```
+├── .env.example                   # Variables de entorno ejemplo
+│   └── MOVIE_API_KEY=your_key    # Ejemplo de configuración
+│
+├── .env.local                    # Variables de entorno locales
+│   └── Valores reales para desarrollo
+│
+├── next.config.ts               # Configuración de Next.js
+│   └── Configuración de rutas, imágenes, etc
+│
+└── tsconfig.json               # Configuración de TypeScript
+    └── Configuración de paths, compilación, etc
 ```
 
