@@ -15,7 +15,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
     <Link href={`/movies/${movie.id}`} className="block rounded-md overflow-hidden shadow-md">
       <div className="relative w-full h-56">
-        <Image src={imageUrl} alt={movie.title} layout="fill" objectFit="cover" />
+        <Image
+          src={imageUrl} 
+          alt={movie.title} 
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold">{movie.title}</h3>

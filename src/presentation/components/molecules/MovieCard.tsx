@@ -1,33 +1,33 @@
 import React from 'react';
-import { Movie } from '@/domain/entities/movie.entity';
-import Link from 'next/link';
 import Image from 'next/image';
+import { Movie } from '../../../domain/entities/movie.entity';
+import Link from 'next/link';
 
 interface MovieCardProps {
   movie: Movie;
+  priority?: boolean; // Añadimos prop opcional para priority
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
-  const imageUrl = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/no-poster.png'; // Asegúrate de tener una imagen por defecto
+const MovieCard: React.FC<MovieCardProps> = ({ movie, priority = false }) => {
+  const imageUrl = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : '/placeholder.png';
 
   return (
-    <Link href={`/movies/${movie.id}`} className="bg-white shadow-md rounded-md overflow-hidden">
-      <Image
-        src={imageUrl}
-        alt={movie.title}
-        width={500}
-        height={750}
-        priority
-        style={{
-          width: '100%',
-          height: 'auto',
-        }}
-      />
+    <Link href={`/movies/${movie.id}`} className="block rounded-md overflow-hidden shadow-md">
+      <div className="relative w-full h-56">
+        <Image
+          src={imageUrl} 
+          alt={movie.title} 
+          fill
+          priority={priority}
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+      </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold">{movie.title}</h3>
-        <p className="text-gray-600 text-sm mt-1">
-          {movie.release_date ? new Date(movie.release_date).toLocaleDateString() : 'N/A'}
-        </p>
+        <p className="text-sm text-gray-500">{movie.release_date}</p>
       </div>
     </Link>
   );
